@@ -6,7 +6,7 @@
 /*   By: mzaraa <mzaraa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 11:36:26 by mzaraa            #+#    #+#             */
-/*   Updated: 2022/09/28 16:37:45 by mzaraa           ###   ########.fr       */
+/*   Updated: 2022/09/28 18:24:00 by mzaraa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ typedef struct s_data
 {
 	struct s_philo	*philo;
 	pthread_mutex_t	*fork;
-	pthread_mutex_t	dead;
+	int				dead;
 	int				state;
 	int				nb_philo;
 	int				time_to_die;

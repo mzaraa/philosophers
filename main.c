@@ -6,7 +6,7 @@
 /*   By: mzaraa <mzaraa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 10:15:39 by mzaraa            #+#    #+#             */
-/*   Updated: 2022/09/28 16:44:56 by mzaraa           ###   ########.fr       */
+/*   Updated: 2022/09/28 18:37:13 by mzaraa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void	init_args(int ac, char **av, t_data *data)
 	data->time_to_eat = ft_atoi(av[3]);
 	data->time_to_sleep = ft_atoi(av[4]);
 	data->nb_time_philo_must_eat = -1;
+	data->dead = 1;
 	if (ac == 6)
 		data->nb_time_philo_must_eat = ft_atoi(av[5]);
 	create_mutex(data);
