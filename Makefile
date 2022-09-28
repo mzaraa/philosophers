@@ -2,7 +2,9 @@
 SRCS	= 	main.c \
 			check_valid_args.c \
 			quit_error.c \
-			simulation.c \
+			start_simulation.c \
+			routine.c \
+			time_ms.c \
 			init_mutex.c \
 			utils.c \
 

@@ -6,7 +6,7 @@
 /*   By: mzaraa <mzaraa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 11:36:26 by mzaraa            #+#    #+#             */
-/*   Updated: 2022/09/26 16:55:05 by mzaraa           ###   ########.fr       */
+/*   Updated: 2022/09/28 16:37:45 by mzaraa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdio.h>
 # include <pthread.h>
 # include <stdbool.h>
+# include <sys/time.h>
 
 # define SLEEP 0
 # define EAT 1
@@ -25,15 +26,18 @@
 # define DEAD 3
 
 # define ERROR_MUTEX_INIT 4
-# define ERROR_MUTEX_CLOSE 3
-# define ERROR_THREAD_CREATE 3
-# define ERROR_THREAD_DETACH 3
-# define ERROR_THREAD_JOIN 3
+# define ERROR_MUTEX_CLOSE 5
+# define ERROR_THREAD_CREATE 6
+# define ERROR_THREAD_DETACH 7
+# define ERROR_THREAD_JOIN 8
+
+typedef unsigned long long int	t_timestamp_ms;
 
 typedef struct s_data
 {
 	struct s_philo	*philo;
 	pthread_mutex_t	*fork;
+	pthread_mutex_t	dead;
 	int				state;
 	int				nb_philo;
 	int				time_to_die;
@@ -46,27 +50,41 @@ typedef struct s_philo
 {
 	struct s_data	*data;
 	pthread_t		id;
+	int				idx;
 	int				state;
 	pthread_mutex_t	*right;
 	pthread_mutex_t	*left;
 	int				max_eat;
+	t_timestamp_ms	last_eat;
 }	t_philo;
 
 /*			Utils		*/
-int		ft_atoi(char *s);
-void	ft_putstr(char *s);
-int		ft_isdigit(int c);
-int		ft_strlen(const char *str);
+int				ft_atoi(char *s);
+void			ft_putstr(char *s);
+int				ft_isdigit(int c);
+int				ft_strlen(const char *str);
 
 /*		Error		*/
-void	quit_error(int error);
+void			quit_error(int error);
 
 /*		Parsing		*/
-int		invalid_args(char **av);
-void	wrong_arg(void);
-void	create_mutex(t_data *data);
+int				invalid_args(char **av);
+void			wrong_arg(void);
+void			create_mutex(t_data *data);
 
-/*		Simulation		*/
-void	simulation(t_data *data);
+/*		Start_simulation		*/
+void			simulation(t_data *data);
+void			philo_join(t_data *data);
+void			destroy_mutex_and_free(t_data *data);
+
+/*		Routine		*/
+void			philo_eat(t_philo *philo);
+void			philo_think(t_philo *philo);
+void			philo_sleep(t_philo *philo);
+void			print_action(t_timestamp_ms time, int id, char	*action);
+
+/*		Time		*/
+t_timestamp_ms	time_ms(void);
+void			ft_usleep(int n);
 
 #endif

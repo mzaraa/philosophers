@@ -1,32 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   simulation.c                                       :+:      :+:    :+:   */
+/*   time_ms.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mzaraa <mzaraa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/26 16:06:55 by mzaraa            #+#    #+#             */
-/*   Updated: 2022/09/26 17:09:29 by mzaraa           ###   ########.fr       */
+/*   Created: 2022/09/28 09:46:53 by mzaraa            #+#    #+#             */
+/*   Updated: 2022/09/28 16:00:17 by mzaraa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	*routine(t_data *data)
+t_timestamp_ms	time_ms(void)
 {
-	(void)data;
-	return NULL;
+	t_timestamp_ms			current;
+	t_timestamp_ms			res;
+	struct timeval			time;
+	static t_timestamp_ms	start = 0;
+
+	gettimeofday(&time, NULL);
+	current = (time.tv_sec * (long)1000) + (time.tv_usec / (long)1000);
+	if (start == 0)
+		start = current;
+	res = current - start;
+	return (res);
 }
 
-void	simulation(t_data *data)
+void	ft_usleep(int n)
 {
-	int	i;
+	t_timestamp_ms	end_time;
 
-	i = 0;
-	while (i < data->nb_philo)
-	{
-		if (pthread_create(&data->philo[i].id, NULL, (void *(*)(void *))routine, data))
-			quit_error(ERROR_THREAD_CREATE);
-		++i;
-	}
+	end_time = time_ms() + n;
+	while (time_ms() < end_time)
+		usleep(10);
 }
