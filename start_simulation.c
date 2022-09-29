@@ -6,7 +6,7 @@
 /*   By: mzaraa <mzaraa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 16:06:55 by mzaraa            #+#    #+#             */
-/*   Updated: 2022/09/28 18:36:33 by mzaraa           ###   ########.fr       */
+/*   Updated: 2022/09/29 17:58:31 by mzaraa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,30 @@
 
 void	*monitor(t_data *data)
 {
-	t_philo	*philo;
+	int		all;
 	int		i;
 
+	all = 0;
 	i = 0;
-	philo = &data->philo[i];
-	data->dead = 1;
-	while (data->dead)
+	while (*data->state)
 	{
-		if ((time_ms() - philo->last_eat) > \
-			(unsigned long long)philo->data->time_to_eat)
+		if (time_ms() >= (data->philo[i].last_eat + \
+			(unsigned long long)data->time_to_die))
 		{
-			data->dead = 0;
-			print_action(time_ms(), philo->idx, "is dead");
+			*data->state = 0;
+			print_action(time_ms(), data->philo[i].idx, "is dead");
 		}
-		if (philo->max_eat >= data->nb_time_philo_must_eat)
+		else if ((data->philo[i].max_eat >= data->nb_time_philo_must_eat) \
+			&& ++all >= data->nb_philo)
+			*data->state = 0;
+		if (++i >= data->nb_philo)
 		{
-			data->dead = 0;
-		}
-		i++;
-		if (i > data->nb_philo)
+			all = 0;
 			i = 0;
-		philo = &data->philo[i];
+			usleep(1000);
+		}
 	}
-	return (NULL);
+	return (data);
 }
 
 void	*routine(t_philo *philo)
@@ -45,16 +45,20 @@ void	*routine(t_philo *philo)
 	int	i;
 
 	i = 0;
-	if (philo->idx % 2 == 0)
+	usleep(100);
+	if ((philo->idx % 2 == 0) && *philo->state_p)
+	{
 		ft_usleep((philo->data->time_to_eat / 2));
-	while (philo->data->dead != 0)
+		usleep(1000);
+	}
+	while (*philo->state_p)
 	{
 		philo_eat(philo);
 		philo_sleep(philo);
 		philo_think(philo);
 		usleep(100);
 	}
-	return (NULL);
+	return (philo);
 }
 
 void	simulation(t_data *data)
@@ -66,15 +70,15 @@ void	simulation(t_data *data)
 	while (i < data->nb_philo)
 	{
 		if (pthread_create(&data->philo[i].id, NULL, \
-			(void *(*)(void *))routine, (void *)&data->philo[i]))
+			(void *(*)(void *))routine, &(data->philo[i])))
 			quit_error(ERROR_THREAD_CREATE);
 		i++;
 	}
 	if (pthread_create(&checker, NULL, \
-		(void *(*)(void *))monitor, (void *)&data))
+		(void *(*)(void *))monitor, data))
 		quit_error(ERROR_THREAD_CREATE);
-	if (pthread_join(checker, NULL))
-		quit_error(ERROR_THREAD_JOIN);
+	else
+		pthread_join(checker, NULL);
 }
 
 void	philo_join(t_data *data)
@@ -86,6 +90,7 @@ void	philo_join(t_data *data)
 	{
 		if (pthread_join(data->philo[i].id, NULL))
 			quit_error(ERROR_THREAD_JOIN);
+		i++;
 	}
 }
 
@@ -98,6 +103,7 @@ void	destroy_mutex_and_free(t_data *data)
 	{
 		if (pthread_mutex_destroy(&(data->fork[i])))
 			quit_error(ERROR_MUTEX_CLOSE);
+		i++;
 	}
 	free(data->fork);
 	free(data->philo);

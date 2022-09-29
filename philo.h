@@ -6,7 +6,7 @@
 /*   By: mzaraa <mzaraa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 11:36:26 by mzaraa            #+#    #+#             */
-/*   Updated: 2022/09/28 18:24:00 by mzaraa           ###   ########.fr       */
+/*   Updated: 2022/09/29 15:24:00 by mzaraa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <pthread.h>
 # include <stdbool.h>
 # include <sys/time.h>
+# include <limits.h>
 
 # define SLEEP 0
 # define EAT 1
@@ -37,8 +38,7 @@ typedef struct s_data
 {
 	struct s_philo	*philo;
 	pthread_mutex_t	*fork;
-	int				dead;
-	int				state;
+	int				*state;
 	int				nb_philo;
 	int				time_to_die;
 	int				time_to_eat;
@@ -51,7 +51,7 @@ typedef struct s_philo
 	struct s_data	*data;
 	pthread_t		id;
 	int				idx;
-	int				state;
+	int				*state_p;
 	pthread_mutex_t	*right;
 	pthread_mutex_t	*left;
 	int				max_eat;
@@ -65,7 +65,7 @@ int				ft_isdigit(int c);
 int				ft_strlen(const char *str);
 
 /*		Error		*/
-void			quit_error(int error);
+int				quit_error(int error);
 
 /*		Parsing		*/
 int				invalid_args(char **av);
@@ -74,6 +74,7 @@ void			create_mutex(t_data *data);
 
 /*		Start_simulation		*/
 void			simulation(t_data *data);
+void			exec_one_philo(t_data *data);
 void			philo_join(t_data *data);
 void			destroy_mutex_and_free(t_data *data);
 

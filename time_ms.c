@@ -6,7 +6,7 @@
 /*   By: mzaraa <mzaraa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 09:46:53 by mzaraa            #+#    #+#             */
-/*   Updated: 2022/09/28 16:00:17 by mzaraa           ###   ########.fr       */
+/*   Updated: 2022/09/29 17:51:59 by mzaraa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 t_timestamp_ms	time_ms(void)
 {
+	static t_timestamp_ms	start = 0;
 	t_timestamp_ms			current;
 	t_timestamp_ms			res;
 	struct timeval			time;
-	static t_timestamp_ms	start = 0;
 
 	gettimeofday(&time, NULL);
 	current = (time.tv_sec * (long)1000) + (time.tv_usec / (long)1000);
