@@ -6,7 +6,7 @@
 /*   By: mzaraa <mzaraa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 09:46:53 by mzaraa            #+#    #+#             */
-/*   Updated: 2022/09/29 17:51:59 by mzaraa           ###   ########.fr       */
+/*   Updated: 2022/09/30 09:55:39 by mzaraa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,5 @@ void	ft_usleep(int n)
 
 	end_time = time_ms() + n;
 	while (time_ms() < end_time)
-		usleep(10);
+		usleep(500);
 }

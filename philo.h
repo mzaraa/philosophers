@@ -6,7 +6,7 @@
 /*   By: mzaraa <mzaraa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 11:36:26 by mzaraa            #+#    #+#             */
-/*   Updated: 2022/09/29 15:24:00 by mzaraa           ###   ########.fr       */
+/*   Updated: 2022/09/30 08:35:51 by mzaraa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_data
 {
 	struct s_philo	*philo;
 	pthread_mutex_t	*fork;
+	pthread_mutex_t	health;
 	int				*state;
 	int				nb_philo;
 	int				time_to_die;
@@ -77,6 +78,7 @@ void			simulation(t_data *data);
 void			exec_one_philo(t_data *data);
 void			philo_join(t_data *data);
 void			destroy_mutex_and_free(t_data *data);
+int				health_check(t_data *data);
 
 /*		Routine		*/
 void			philo_eat(t_philo *philo);

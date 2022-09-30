@@ -8,6 +8,7 @@ SRCS	= 	main.c \
 			init_mutex.c \
 			utils.c \
 			one_philo.c \
+			mutex_health_check.c \
 
 OBJS	= $(addprefix bin/, $(SRCS:.c=.o))
 
